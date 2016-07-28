@@ -1,0 +1,35 @@
+{
+  "name": "voting-app",
+  "version": "0.0.1",
+  "description": "full stack project for free code camp",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jesse989/voting-app"
+  },
+  "author": "Jesse989",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jesse989/voting-app/issues"
+  },
+  "homepage": "https://github.com/Jesse989/voting-app#readme",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-chart": "^0.5.0",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.2",
+    "chart.js": "^2.2.0-rc.2",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.4.2",
+    "express": "^4.14.0",
+    "express-session": "^1.14.0",
+    "mongoose": "^4.5.5",
+    "morgan": "^1.7.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7"
+  }
+}

@@ -1,0 +1,27 @@
+
+
+    <div id="content" class="col-sm-offset-3 col-sm-6 col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 text-center">
+        <h2>Sign up</h2>
+        <br>
+
+        <form ng-Submit="register()" class="form-auth">
+            <p class="text-warning">{{errorMessage}}</p>
+            <div class="form-group">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-user"></i></span>
+                <input ng-model="user.username" required type="text" class="form-control" placeholder="Username..." aria-describedby="basic-addon1">
+            </div>
+            </div>
+            <div class="form-group">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-asterisk"></i> </span>
+                <input ng-model="user.password" required type="password" class="form-control" placeholder="Password..." aria-describedby="basic-addon1">
+            </div>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-lg btn-info">Submit</button>
+            <br> Already have an account? Sign in
+            <a href="#/login">here</a>.
+        </form>
+    </div>
+

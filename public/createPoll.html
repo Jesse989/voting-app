@@ -1,0 +1,34 @@
+
+
+<div id="content" class="col-sm-offset-3 col-sm-6 col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 text-center">
+
+<h2>Create Poll</h2>
+    <br>
+    <form  ng-Submit="createPoll()" class="form-inline">
+        <p class="text-warning"> {{errorMessage}} </p>
+        <div class="form-group">
+            <div class="input-group input-group-lg">
+                <input ng-model="newPoll.title" required type="text" class="form-control" placeholder="Title..." aria-describedby="basic-addon1">
+                <span class="input-group-addon" id="basic-addon2">Title</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group input-group-lg">
+                <input ng-model="choice" type="text" class="form-control" placeholder="Option..." aria-describedby="basic-addon1">
+                <span class="input-group-btn" ng-click="insertOptions()"><a class="btn btn-success" href="">Add</a></span>
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <button type="submit" class="btn btn-lg btn-info">Submit</button>
+ 
+    </form>
+    <div id="pollChoices" class="col-xs-12">
+        <div ng-repeat="choice in newPoll.choices">
+            {{choice}}
+        </div>
+    </div>
+    
+    
+</div>
