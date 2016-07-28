@@ -114,10 +114,9 @@ app.controller("chartController", ['sharedProperties', 'postService', '$scope', 
                     votes: [],
                     con: []
                 };
-            }).success(function(data){
-                $location.redirect('/');
             });
             alert('Poll created succesfully');
+            $location.redirect('/');
         }
     };
 
