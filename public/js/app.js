@@ -128,6 +128,8 @@ app.controller("chartController", ['sharedProperties', 'postService', '$scope', 
             $scope.series = poll.title;
             $scope.data = poll.votes; 
             $scope.con = poll.con;
+        }).success(function(data){
+            $location.redirect('/');
         });
         $scope.eligible = $scope.canAdd();  
         
