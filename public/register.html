@@ -5,7 +5,9 @@
         <br>
 
         <form ng-Submit="register()" class="form-auth">
-            <p class="text-warning">{{error_message}}</p>
+            <div ng-hide="!error_message" class="alert alert-warning">
+                <strong>{{error_message}}</strong>
+            </div>
             <div class="form-group">
             <div class="input-group input-group-lg">
                 <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-user"></i></span>
@@ -16,6 +18,12 @@
             <div class="input-group input-group-lg">
                 <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-asterisk"></i> </span>
                 <input ng-model="user.password" required type="password" class="form-control" placeholder="Password..." aria-describedby="basic-addon1">
+            </div>
+            </div>
+            <div class="form-group">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-asterisk"></i> </span>
+                <input ng-model="user.verifyPassword" required type="password" class="form-control" placeholder="Verify password..." aria-describedby="basic-addon1">
             </div>
             </div>
             <br>

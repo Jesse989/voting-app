@@ -5,7 +5,12 @@
 <h2>Create Poll</h2>
     <br>
     <form  ng-Submit="createPoll()" class="form-inline">
-        <p class="text-warning"> {{errorMessage}} </p>
+        <div ng-hide="!error_message" class="alert alert-warning">
+            <strong>{{error_message}}</strong>
+        </div>
+        <div ng-hide="!success_message" class="success alert-success">
+            <strong>{{success_message}}</strong>
+        </div>
         <div class="form-group">
             <div class="input-group input-group-lg">
                 <input ng-model="newPoll.title" required type="text" class="form-control" placeholder="Title..." aria-describedby="basic-addon1">

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require( 'mongoose' );
 var Poll = mongoose.model('Poll');
+var sanitize = require("mongo-sanitize");
 //Used for routes that must be authenticated.
 function isAuthenticated (req, res, next) {
     // if user is authenticated in the session, call the next() to call the next request handler
@@ -41,8 +42,8 @@ router.route('/polls')
     .post(function(req, res){
 
         var poll = new Poll();
-        poll.title = req.body.title;
-        poll.choices = req.body.choices;
+        poll.title = sanitize(req.body.title);
+        poll.choices = sanitize(req.body.choices);
         poll.votes = req.body.votes;
         poll.created_by = req.body.created_by;
         poll.con = req.body.con;
@@ -79,7 +80,7 @@ router.route('/polls/:id')
         Poll.findById(req.params.id, function(err, poll){
             if(err)
                 return res.send(err);
-                poll.choices = req.body.choices;
+                poll.choices = sanitize(req.body.choices);
                 poll.votes = req.body.votes;
                 poll.con = req.body.con;
         

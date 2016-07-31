@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var bCrypt = require('bcrypt-nodejs');
 var User = mongoose.model('User');
 var LocalStrategy = require('passport-local').Strategy;
+var sanitize = require("mongo-sanitize");
 
 module.exports = function(passport){
 
@@ -20,6 +21,8 @@ module.exports = function(passport){
             passReqToCallback : true
         },
         function(req, username, password, done) {
+            username = sanitize(username);
+            password = sanitize(password);
             // check in mongo if a user with username exists or not
             User.findOne({ 'username' :  username },
                 function(err, user) {
@@ -48,7 +51,8 @@ module.exports = function(passport){
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
         function(req, username, password, done) {
-
+            username = sanitize(username);
+            password = sanitize(password);
             // find a user in mongo with provided username
             User.findOne({ 'username' :  username }, function(err, user) {
                 // In case of any error, return using the done method

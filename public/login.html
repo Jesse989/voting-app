@@ -3,7 +3,9 @@
 <h2>Sign in</h2>
     <br>
     <form  ng-Submit="login()" class="form-auth">
-        <p class="text-warning"> {{error_message}}</p>
+        <div ng-hide="!error_message" class="alert alert-warning">
+            <strong>{{error_message}}</strong>
+        </div>
         <div class="form-group">
             <div class="input-group input-group-lg">
                 <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-user"></i></span>

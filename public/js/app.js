@@ -8,14 +8,24 @@ app.factory('postService', function($resource){
 });
 
 app.service('sharedProperties', function () {
-    var current_user = "";
+    var current_user = {
+        username: "",
+        password: ""
+    };
+    
 
     return {
         getUsername: function () {
-            return current_user;
+            return current_user.username;
         },
         setUsername: function(value) {
-            current_user = value;
+            current_user.username = value;
+        },
+        getPassword: function () {
+            return current_user.password;
+        },
+        setPassword: function(value) {
+            current_user.password = value;
         }
     };
 });
@@ -66,10 +76,14 @@ app.run(function($rootScope, sharedProperties, $http){
 app.controller("deleteController", ['sharedProperties', 'postService', '$scope', '$http', function (sharedProperties, postService, $scope, $http) {
     $scope.polls = postService.query();
     $scope.username = sharedProperties.getUsername();
+    $scope.deleteConfirmation = false;
+    
     $scope.delete = function($event) {
-        console.log($event.target.id)
-        postService.remove({id:$event.target.id});
-        $scope.polls = postService.query();
+
+            postService.remove({id:$event.target.id});
+            $scope.polls = postService.query();
+            $scope.success_message = "Succesfully removed poll";
+       
     };
 }]);
 
@@ -78,6 +92,7 @@ app.controller("chartController", ['sharedProperties', 'postService', '$scope', 
     $scope.polls = postService.query();
     $scope.choice = "";
     $scope.error_message = "";
+    $scope.success_message = "";
     $scope.id = "";
 
     $scope.newPoll = { 
@@ -95,14 +110,30 @@ app.controller("chartController", ['sharedProperties', 'postService', '$scope', 
         $scope.newPoll.votes.push(1);
         $scope.choice = "";
     };
+ 
+    $scope.toTitleCase = function(str){
+        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    };
     
+    $scope.changeLocation = function(url, forceReload) {
+        $scope = $scope || angular.element(document).scope();
+        if(forceReload || $scope.$$phase) {
+            window.location = url;
+        }
+    };
 
+    
     $scope.createPoll = function(){
         $scope.newPoll.created_by = sharedProperties.getUsername(); //TODO change to rootscope current user
         $scope.newPoll.created_at = Date.now();
+        
         if($scope.newPoll.choices.length < 2){
-            alert('Enter at least two choices!');
+            $scope.error_message = 'Enter at least two choices!';
         } else {
+            $scope.newPoll.title = $scope.toTitleCase($scope.newPoll.title);
+            for(var i in $scope.newPoll.choices){
+                $scope.newPoll.choices[i] = $scope.toTitleCase($scope.newPoll.choices[i]);
+            }
             postService.save($scope.newPoll, function(){
     
                 $scope.polls = postService.query();
@@ -115,13 +146,16 @@ app.controller("chartController", ['sharedProperties', 'postService', '$scope', 
                     con: []
                 };
             });
-            alert('Poll created succesfully');
-            $location.redirect('/');
+            $scope.success_message = 'Poll created succesfully';
+            
+            $scope.changeLocation('#/poll', false);
+            
         }
     };
 
     $scope.viewPoll = function($event) {
         
+        $scope.success_message = "";  
         
         var poll = postService.get({id:$event.target.id}, function() {
             $scope.id = poll._id;
@@ -129,18 +163,27 @@ app.controller("chartController", ['sharedProperties', 'postService', '$scope', 
             $scope.series = poll.title;
             $scope.data = poll.votes; 
             $scope.con = poll.con;
+             
         });
-        $scope.eligible = $scope.canAdd();  
         
+        
+        $scope.eligible = $scope.canAdd();  
+       
     };
     
 
     $scope.addOption = function() {
         if($scope.canVote()){
-            $scope.labels.push($scope.choice);
-            $scope.data.push(1);
-            $scope.update();
-            $scope.choic = "";
+            if($scope.labels.indexOf($scope.toTitleCase($scope.choice)) === -1){
+                $scope.labels.push($scope.toTitleCase($scope.choice));
+                $scope.data.push(1);
+                $scope.update();
+                $scope.choice = "";
+                $scope.success_message = "Added succesfully";
+            }else {
+                alert("That is already an option.");
+                $scope.choice = "";
+            }
         } else {
             alert("You already added or voted!");
             $scope.choice = "";
@@ -148,11 +191,13 @@ app.controller("chartController", ['sharedProperties', 'postService', '$scope', 
     };
   
     $scope.onClick = function (points) {
+        
         if($scope.canVote()){
             $scope.data[points[0]._index] += 1;
             $scope.update();
+            $scope.success_message = "Thanks for your vote!";
         } else {
-            alert("You have already voted!");
+            alert("You have already voted")
         }
     };
   
@@ -197,6 +242,7 @@ app.controller('authController', function(sharedProperties, $scope, $http, $loca
         $http.get('auth/signout');
         $rootScope.authenticated = false;
         sharedProperties.setUsername($rootScope.ip);
+        sharedProperties.setPassword("");
         $location.path('/');
     };
     
@@ -205,6 +251,7 @@ app.controller('authController', function(sharedProperties, $scope, $http, $loca
             if(data.state == 'success'){
                 $rootScope.authenticated = true;
                 sharedProperties.setUsername(data.user.username);
+                sharedProperties.setPassword(data.user.password);
                 $location.path('/');
             }
             else {
@@ -214,16 +261,22 @@ app.controller('authController', function(sharedProperties, $scope, $http, $loca
     };
    
     $scope.register = function(){
-        $http.post('/auth/signup', $scope.user).success(function(data){
-            if(data.state == 'success'){
-                $rootScope.authenticated = true;
-                sharedProperties.setUsername(data.user.username);
-                $location.path('/');
-            }
-            else{
-                $scope.error_message = data.message;
-            }
-        });
+        if($scope.user.password === $scope.user.verifyPassword){
+            $http.post('/auth/signup', $scope.user).success(function(data){
+                if(data.state == 'success'){
+                    $rootScope.authenticated = true;
+                    sharedProperties.setUsername(data.user.username);
+                    $location.path('/');
+                }
+                else{
+                    $scope.error_message = data.message;
+                }
+            });
+        } else{
+            $scope.user.password = "";
+            $scope.user.verifyPassword = "";
+            $scope.error_message = 'Passwords do not match';
+        }
     };
     
 });
