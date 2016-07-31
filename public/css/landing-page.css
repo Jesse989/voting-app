@@ -192,4 +192,13 @@ p.copyright {
 #pollTitle {
     margin-bottom: -70px;
 }
+
+.poll {
+    text-decoration: none;
+    
+}
+
+.poll:hover {
+    font-size: larger;
+}
     

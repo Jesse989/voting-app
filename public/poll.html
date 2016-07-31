@@ -1,9 +1,14 @@
 <div id="myChart" class="col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
  <div class="row">
   <div id="polls" class="col-xs-2">
+    <div class="alert alert-info">
+      <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>How-To:</strong> Hover over chart for options, click the option you most agree with. Login and add another option if you prefer!
+   </div>
    <ul ng-repeat="poll in polls">
-    <li><a ng-click="viewPoll($event)" id="{{poll._id}}" href="">{{poll.title}}</a></li>
+    <li><a class="poll" ng-click="viewPoll($event)" id="{{poll._id}}" href="">{{poll.title}}</a></li>
    </ul>
+   
   </div>
 
   <div class="text-center col-xs-8">
@@ -13,17 +18,15 @@
 
    <canvas id="myChart" class="chart chart-doughnut" chart-data="data" chart-labels="labels" chart-series="series" chart-click="onClick"></canvas>
    
+   
+   <div id="pollChoices" ng-show="eligible" class="input-group input-group-sm">
+    <input ng-model="choice" type="text" class="form-control" placeholder="Option..." aria-describedby="basic-addon1">
+    <span class="input-group-btn" ng-click="addOption()"><a class="btn btn-success" href="">Add</a></span>
+   </div>
     <div ng-show="success_message" class="success alert-success">
      <strong>{{success_message}}</strong>
    </div>
-   <div id="pollChoices" ng-show="eligible" class="input-group input-group-md">
-    <input ng-model="choice" type="text" class="form-control" placeholder="Option..." aria-describedby="basic-addon1">
-    <span class="input-group-btn" ng-click="addOption()"><a class="btn btn-success" href="">Add</a></span>
-
-   </div>
-   <div class="alert alert-info">
-  <strong>How-To:</strong> Hover over chart for options, click the option you most agree with. Login and add another option if you prefer!
-   </div>
+  
 
  </div>
 </div>
