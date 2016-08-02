@@ -77,6 +77,7 @@ app.controller("deleteController", ['sharedProperties', 'postService', '$scope',
     $scope.polls = postService.query();
     $scope.username = sharedProperties.getUsername();
     $scope.deleteConfirmation = false;
+
     
     $scope.delete = function($event) {
 
@@ -104,11 +105,24 @@ app.controller("chartController", ['sharedProperties', 'postService', '$scope', 
         con: []
     };
     
-    
+    $scope.allLetter = function(inputtxt) {  
+        var letters = /^[A-Za-z]+$/;  
+        if(inputtxt.match(letters)) {  
+            return true;  
+        }  
+        else {
+            $scope.error_message = "Choices can be entered in letters only";
+            return false;  
+            }  
+        }; 
+
+
     $scope.insertOptions = function(){
-        $scope.newPoll.choices.push($scope.choice);
-        $scope.newPoll.votes.push(1);
-        $scope.choice = "";
+        if($scope.choice && $scope.allLetter($scope.choice)) {
+            $scope.newPoll.choices.push($scope.choice);
+            $scope.newPoll.votes.push(1);
+            $scope.choice = "";
+        }
     };
  
     $scope.toTitleCase = function(str){

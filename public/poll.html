@@ -5,6 +5,7 @@
       <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
   <strong>How-To:</strong> Hover over chart for options, click the option you most agree with. Login and add another option if you prefer!
    </div>
+   <h3>Choose Poll:</h3>
    <ul ng-repeat="poll in polls">
     <li><a class="poll" ng-click="viewPoll($event)" id="{{poll._id}}" href="">{{poll.title}}</a></li>
    </ul>
